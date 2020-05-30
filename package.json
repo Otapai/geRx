@@ -1,0 +1,28 @@
+{
+  "name": "gerx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "geRx.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Otapai/geRx.git"
+  },
+  "keywords": [
+    "angular",
+    "rxjs",
+    "store",
+    "global event"
+  ],
+  "author": "Ilya Samoylov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Otapai/geRx/issues"
+  },
+  "homepage": "https://github.com/Otapai/geRx#readme",
+  "dependencies": {
+    "rxjs": "^6.5.5"
+  }
+}
