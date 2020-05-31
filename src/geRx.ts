@@ -10,8 +10,8 @@ export class GeRx {
     options?: GeRxOptions
   ): void {
     if (!this.store[name] || (options && options.override)) {
-      const geEntity: Store = {};
-      this.store[name] = geEntity;
+      // need fix typing
+      this.store[name] = {};
 
       this.store[name].loading = false;
       this.store[name].loading$ = new Subject<boolean>();
@@ -47,7 +47,7 @@ export class GeRx {
     }
   }
 
-  public deleteEntity(name): void {
+  public deleteEntity(name: string): void {
     if (this.store[name]) {
       delete this.store[name];
     } else {
@@ -55,7 +55,7 @@ export class GeRx {
     }
   }
 
-  public cleanEntity(name): void {
+  public cleanEntity(name: string): void {
     if (this.store[name]) {
       return this.store[name].clean;
     } else {
@@ -63,11 +63,11 @@ export class GeRx {
     }
   }
 
-  public getData$(entityName): Subject<any> {
+  public getData$(entityName: string): Subject<any> {
     return this.store[entityName].data$;
   }
 
-  public getData(entityName): any {
+  public getData(entityName: string): any {
     return this.store[entityName].data;
   }
 
@@ -81,11 +81,11 @@ export class GeRx {
     return allData;
   }
 
-  public loading$(entityName): Subject<boolean> {
+  public loading$(entityName: string): Subject<boolean> {
     return this.store[entityName].loading$;
   }
 
-  public loading(entityName): boolean {
+  public loading(entityName: string): boolean {
     return this.store[entityName].loading;
   }
 

@@ -1,21 +1,21 @@
 declare module "geRx.interface" {
-    import { Subject } from "rxjs";
+    import { Observable, Subject } from "rxjs";
     export interface Store {
-        show?: void;
-        add?: void;
-        edit?: void;
-        delete?: void;
-        clean?: void;
+        show?: () => void;
+        add?: () => void;
+        edit?: () => void;
+        delete?: () => void;
+        clean?: () => void;
         data?: any;
         data$?: Subject<any>;
         loading?: boolean;
         loading$?: Subject<boolean>;
     }
     export interface GeRxMethods {
-        show?: void;
-        add?: void;
-        edit?: void;
-        delete?: void;
+        show?: Observable<any>;
+        add?: Observable<any>;
+        edit?: Observable<any>;
+        delete?: Observable<any>;
     }
     export interface GeRxOptions {
         override: boolean;
@@ -27,13 +27,13 @@ declare module "geRx" {
     export class GeRx {
         private store;
         addEntity(name: string, methods: GeRxMethods, options?: GeRxOptions): void;
-        deleteEntity(name: any): void;
-        cleanEntity(name: any): void;
-        getData$(entityName: any): Subject<any>;
-        getData(entityName: any): any;
+        deleteEntity(name: string): void;
+        cleanEntity(name: string): void;
+        getData$(entityName: string): Subject<any>;
+        getData(entityName: string): any;
         getAllData(): {};
-        loading$(entityName: any): Subject<boolean>;
-        loading(entityName: any): boolean;
+        loading$(entityName: string): Subject<boolean>;
+        loading(entityName: string): boolean;
         show(entityName: string, params?: any): void;
         add(entityName: string, params?: any): void;
         edit(entityName: string, params?: any): void;
