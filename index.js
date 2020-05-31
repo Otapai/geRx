@@ -12,8 +12,8 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
         }
         addEntity(name, methods, options) {
             if (!this.store[name] || (options && options.override)) {
-                const geEntity = {};
-                this.store[name] = geEntity;
+                // need fix typing
+                this.store[name] = {};
                 this.store[name].loading = false;
                 this.store[name].loading$ = new rxjs_1.Subject();
                 this.store[name].data = null;

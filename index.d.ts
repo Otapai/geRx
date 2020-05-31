@@ -27,13 +27,13 @@ declare module "geRx" {
     export class GeRx {
         private store;
         addEntity(name: string, methods: GeRxMethods, options?: GeRxOptions): void;
-        deleteEntity(name: any): void;
-        cleanEntity(name: any): void;
-        getData$(entityName: any): Subject<any>;
-        getData(entityName: any): any;
+        deleteEntity(name: string): void;
+        cleanEntity(name: string): void;
+        getData$(entityName: string): Subject<any>;
+        getData(entityName: string): any;
         getAllData(): {};
-        loading$(entityName: any): Subject<boolean>;
-        loading(entityName: any): boolean;
+        loading$(entityName: string): Subject<boolean>;
+        loading(entityName: string): boolean;
         show(entityName: string, params?: any): void;
         add(entityName: string, params?: any): void;
         edit(entityName: string, params?: any): void;
