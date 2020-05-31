@@ -5,6 +5,7 @@ define("geRx.interface", ["require", "exports"], function (require, exports) {
 define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.GeRx = void 0;
     class GeRx {
         constructor() {
             this.store = {};
