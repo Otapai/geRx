@@ -1,8 +1,12 @@
 {
   "name": "gerx",
-  "version": "1.0.2",
+  "version": "1.0.20",
   "description": "",
-  "main": "geRx.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": {
+    "geRx": "index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,7 +26,7 @@
     "url": "https://github.com/Otapai/geRx/issues"
   },
   "homepage": "https://github.com/Otapai/geRx#readme",
-  "dependencies": {
+  "peerDependencies": {
     "rxjs": "^6.5.5"
   }
 }
