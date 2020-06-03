@@ -6,6 +6,81 @@ geRx provides features for implementing onPush and onPull strategies, tracking r
 
 ---
 
+##### Example
+
+- `app.module.ts`
+```angular2
+import { GeRx } from 'geRx';
+
+@NgModule({
+  [...]
+  providers: [GeRx],
+  [...]
+})
+export class AppModule {}
+```
+
+
+- `app.service.ts`
+```angular2
+export class AppService {
+  hello(): Observable<any>  {
+    return of({message: 'Test geRx'}).pipe(delay(3000));
+  }
+
+  edit(text: string): Observable<any> {
+    return of({message: text}).pipe(delay(3000));
+  }
+}
+```
+
+- `app.component.ts`
+```angular2
+@Component({
+  selector: 'test-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TestComponent implements OnInit, AfterViewInit {
+  constructor(public geRx: GeRx, private appService: AppService) {}
+
+  ngOnInit(): void {
+    const geRxMethods: GeRxMethods = {
+      show: this.appService.hello.bind(this.appService),
+      edit: this.appService.edit.bind(this.appService)
+    };
+    return this.geRx.addEntity('hello', geRxMethods);
+  }
+
+  ngAfterViewInit(): void {
+    this.geRx.show('hello');
+  }
+
+  edit(text): void {
+    this.geRx.edit('hello', text);
+  }
+
+  clear(): void {
+    this.geRx.cleanEntity('hello');
+  }
+}
+```
+
+- `app.component.html`
+```angular2html
+<p>Data$: {{ geRx.getData$(entityName) | async | json }}</p>
+<p>Loading$: {{ geRx?.loading$(entityName) | async | json }}</p>
+<p>
+  <input type="text" #test />
+  <button (click)="onEdit(test.value)">Edit</button>
+  <button (click)="onClear()">Clear</button>
+</p>
+```
+
+
+---
+
 **Description of the methods:**
 
 - `addEntity(name: string, methods: GeRxMethods, options?: GeRxOptions)` -
@@ -18,15 +93,15 @@ geRx provides features for implementing onPush and onPull strategies, tracking r
 - `loading$` - request status at the moment of use _onPush_ strategy
 - `loading` - request status at the moment of use _onPull_ strategy
 
-**Methods for sending data and changing state of an entity:**
+##### Methods for sending data and changing state of an entity
 
 - `show(entityName: string, params?: any)`
 - `add(entityName: string, params?: any)`
 - `edit(entityName: string, params?: any)`
 - `delete(entityName: string, params?: any)`
 
-**Types of parameters used**
+##### Types of parameters used
 
 - `GeRxMethods: { show?: Observable<any>; add?: Observable<any>; edit?: Observable<any>; delete?: Observable<any>; }`
 - `GeRxOptions: { override: boolean; }`
-    - `override` - recreate an entity when it is reinitialized
+  - `override` - recreate an entity when it is reinitialized
