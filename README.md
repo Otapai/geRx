@@ -52,7 +52,7 @@ export class TestComponent implements OnInit, AfterViewInit {
       show: this.appService.hello.bind(this.appService),
       edit: this.appService.edit.bind(this.appService)
     };
-    return this.geRx.addEntity(this.entityName, geRxMethods);
+    this.geRx.addEntity(this.entityName, geRxMethods);
   }
 
   ngAfterViewInit(): void {
