@@ -56,7 +56,7 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
         };
         GeRx.prototype.cleanEntity = function (name) {
             if (this.store[name]) {
-                return this.store[name].clean;
+                this.store[name].clean();
             }
             else {
                 console.error({ deleteEntity: "Entity \"" + name + "\" does not exist" });

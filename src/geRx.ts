@@ -59,7 +59,7 @@ export class GeRx {
 
   public cleanEntity(name: string): void {
     if (this.store[name]) {
-      return this.store[name].clean;
+      this.store[name].clean();
     } else {
       console.error({ deleteEntity: `Entity "${name}" does not exist` });
     }
