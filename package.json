@@ -1,10 +1,12 @@
 {
   "name": "gerx",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "",
   "main": "./dist/index.js",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "rxjs": "^6.5.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
