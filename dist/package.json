@@ -2,9 +2,11 @@
   "name": "gerx",
   "version": "1.0.28",
   "description": "",
-  "main": "./dist/index.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": {
+    "gerx": "index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/Otapai/geRx/issues"
   },
-  "homepage": "https://github.com/Otapai/geRx#readme"
+  "homepage": "https://github.com/Otapai/geRx#readme",
+  "peerDependencies": {
+    "rxjs": "^6.5.5"
+  }
 }
