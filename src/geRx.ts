@@ -25,17 +25,19 @@ export class GeRx {
 
       // tslint:disable-next-line:forin
       for (const methodName in methods) {
-        this.store[name][methodName] = (params) => {
+        this.store[name][methodName] = (params: any) => {
           this.store[name].loading = true;
           setTimeout(() => {
             this.store[name].loading$.next(true);
           }, 0);
           const subscriber = methods[methodName](params).subscribe(
-            (data) => {
+            (data: any) => {
               this.store[name].data = data;
               this.store[name].data$.next(data);
             },
-            (error) => {},
+            (error: any) => {
+              console.error(error);
+            },
             () => {
               this.store[name].loading = false;
               this.store[name].loading$.next(false);

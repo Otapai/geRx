@@ -2,17 +2,41 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": "src",
-    "outFile": "./index.js",
+    "outFile": "./dist/index.js",
     "module": "amd",
-    "outDir": "./",
-    "target": "es2015",
-    "lib": ["es2017", "dom"],
+    "outDir": "./dist",
+    "target": "es5",
+    "lib": [
+      "es5",
+      "es2015.iterable",
+      "es2015.collection",
+      "es2015.promise",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "dom"
+    ],
     "baseUrl": ".",
     "declaration": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "strictFunctionTypes": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "stripInternal": false
   },
   "files": [
     "src/geRx.ts",
     "src/geRx.interface.ts"
-  ]
+  ],
+  "formatCodeOptions": {
+    "indentSize": 2,
+    "tabSize": 2
+  },
+  "bazelOptions": {
+    "suppressTsconfigOverrideWarnings": true
+  }
 }
