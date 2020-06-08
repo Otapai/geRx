@@ -23,19 +23,19 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
                     _this.store[name].data$.next(null);
                 };
                 var _loop_1 = function (methodName) {
-                    this_1.store[name][methodName] = function (params) {
-                        _this.store[name].loading = true;
+                    this_1.store[name][methodName] = function (params, options) {
                         setTimeout(function () {
+                            _this.store[name].loading = true;
                             _this.store[name].loading$.next(true);
                         }, 0);
                         var subscriber = methods[methodName](params).subscribe(function (data) {
                             _this.store[name].data = data;
                             _this.store[name].data$.next(data);
                         }, function (error) {
-                            console.error(error);
+                            _this.loadingFinish();
+                            console.error("geRx error: " + error);
                         }, function () {
-                            _this.store[name].loading = false;
-                            _this.store[name].loading$.next(false);
+                            _this.loadingFinish();
                             subscriber.unsubscribe();
                         });
                     };
@@ -45,6 +45,13 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
                     _loop_1(methodName);
                 }
             }
+        };
+        GeRx.prototype.loadingFinish = function () {
+            var _this = this;
+            setTimeout(function () {
+                _this.store[name].loading = false;
+                _this.store[name].loading$.next(false);
+            }, 100);
         };
         GeRx.prototype.deleteEntity = function (name) {
             if (this.store[name]) {

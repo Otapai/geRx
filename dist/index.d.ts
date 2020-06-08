@@ -18,7 +18,10 @@ declare module "geRx.interface" {
         delete?: Observable<any>;
     }
     export interface GeRxOptions {
-        override: boolean;
+        override?: boolean;
+    }
+    export interface GeRxMethodOptions {
+        switchKey?: string;
     }
 }
 declare module "geRx" {
@@ -27,6 +30,7 @@ declare module "geRx" {
     export class GeRx {
         private store;
         addEntity(name: string, methods: GeRxMethods, options?: GeRxOptions): void;
+        private loadingFinish;
         deleteEntity(name: string): void;
         cleanEntity(name: string): void;
         getData$(entityName: string): Subject<any>;

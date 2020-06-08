@@ -1,5 +1,5 @@
 import { Subject } from "rxjs";
-import { GeRxMethods, GeRxOptions, Store } from "./geRx.interface";
+import {GeRxMethodOptions, GeRxMethods, GeRxOptions, Store} from "./geRx.interface";
 
 export class GeRx {
   private store: any = {};
@@ -25,9 +25,9 @@ export class GeRx {
 
       // tslint:disable-next-line:forin
       for (const methodName in methods) {
-        this.store[name][methodName] = (params: any) => {
-          this.store[name].loading = true;
+        this.store[name][methodName] = (params: any, options?: GeRxMethodOptions) => {
           setTimeout(() => {
+            this.store[name].loading = true;
             this.store[name].loading$.next(true);
           }, 0);
           const subscriber = methods[methodName](params).subscribe(
@@ -36,17 +36,24 @@ export class GeRx {
               this.store[name].data$.next(data);
             },
             (error: any) => {
-              console.error(error);
+              this.loadingFinish();
+              console.error(`geRx error: ${error}`);
             },
             () => {
-              this.store[name].loading = false;
-              this.store[name].loading$.next(false);
+              this.loadingFinish();
               subscriber.unsubscribe();
             }
           );
         };
       }
     }
+  }
+
+  private loadingFinish() {
+    setTimeout(() => {
+      this.store[name].loading = false;
+      this.store[name].loading$.next(false);
+    }, 100)
   }
 
   public deleteEntity(name: string): void {

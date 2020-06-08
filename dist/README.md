@@ -72,7 +72,7 @@ export class TestComponent implements OnInit, AfterViewInit {
 - `app.component.html`
 ```angular2html
 <p>Data$: {{ geRx.getData$(entityName) | async | json }}</p>
-<p>Loading$: {{ geRx?.loading$(entityName) | async | json }}</p>
+<p>Loading$: {{ geRx.loading$(entityName) | async | json }}</p>
 <p>
   <input type="text" #test />
   <button (click)="onEdit(test.value)">Edit</button>

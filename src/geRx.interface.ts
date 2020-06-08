@@ -20,5 +20,9 @@ export interface GeRxMethods {
 }
 
 export interface GeRxOptions {
-  override: boolean;
+  override?: boolean;
+}
+
+export interface GeRxMethodOptions {
+  switchKey?: string;
 }
