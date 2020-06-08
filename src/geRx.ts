@@ -36,11 +36,11 @@ export class GeRx {
               this.store[name].data$.next(data);
             },
             (error: any) => {
-              this.loadingFinish();
+              this.loadingFinish(name);
               console.error(`geRx error: ${error}`);
             },
             () => {
-              this.loadingFinish();
+              this.loadingFinish(name);
               subscriber.unsubscribe();
             }
           );
@@ -49,7 +49,7 @@ export class GeRx {
     }
   }
 
-  private loadingFinish() {
+  private loadingFinish(name: string) {
     setTimeout(() => {
       this.store[name].loading = false;
       this.store[name].loading$.next(false);
