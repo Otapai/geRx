@@ -32,10 +32,10 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
                             _this.store[name].data = data;
                             _this.store[name].data$.next(data);
                         }, function (error) {
-                            _this.loadingFinish();
+                            _this.loadingFinish(name);
                             console.error("geRx error: " + error);
                         }, function () {
-                            _this.loadingFinish();
+                            _this.loadingFinish(name);
                             subscriber.unsubscribe();
                         });
                     };
@@ -46,7 +46,7 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
                 }
             }
         };
-        GeRx.prototype.loadingFinish = function () {
+        GeRx.prototype.loadingFinish = function (name) {
             var _this = this;
             setTimeout(function () {
                 _this.store[name].loading = false;
