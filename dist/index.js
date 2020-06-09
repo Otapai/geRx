@@ -31,13 +31,13 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
                             _this.store[name].data = data;
                             _this.store[name].data$.next(data);
                             if (_this.store[name][methodName + "Success"]) {
-                                _this.store[name][methodName + "Success"]();
+                                _this.store[name][methodName + "Success"](data);
                             }
                         }, function (error) {
                             _this.loadingFinish(name);
                             console.error("geRx error:", error);
                             if (_this.store[name][methodName + "Error"]) {
-                                _this.store[name][methodName + "Error"]();
+                                _this.store[name][methodName + "Error"](error);
                             }
                         }, function () {
                             _this.loadingFinish(name);

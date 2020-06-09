@@ -31,21 +31,21 @@ export class GeRx {
             this.store[name].loading$.next(true);
           }, 0);
           const subscriber = methods[methodName](params, options).subscribe(
-            (data: any) => {
+            (data: any): void => {
               this.store[name].data = data;
               this.store[name].data$.next(data);
               if (this.store[name][`${methodName}Success`]) {
-                this.store[name][`${methodName}Success`]();
+                this.store[name][`${methodName}Success`](data);
               }
             },
-            (error: any) => {
+            (error: any): void => {
               this.loadingFinish(name);
               console.error(`geRx error:`, error);
               if (this.store[name][`${methodName}Error`]) {
-                this.store[name][`${methodName}Error`]();
+                this.store[name][`${methodName}Error`](error);
               }
             },
-            () => {
+            (): void=> {
               this.loadingFinish(name);
               subscriber.unsubscribe();
             }
