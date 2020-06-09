@@ -1,6 +1,6 @@
 {
   "name": "gerx",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "geRx is the data and state storage of your application, built on top of RxJs.",
   "main": "index.js",
   "types": "index.d.ts",

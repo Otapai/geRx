@@ -5,7 +5,6 @@ define("geRx.interface", ["require", "exports"], function (require, exports) {
 define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.GeRx = void 0;
     var GeRx = (function () {
         function GeRx() {
             this.store = {};
@@ -28,12 +27,18 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
                             _this.store[name].loading = true;
                             _this.store[name].loading$.next(true);
                         }, 0);
-                        var subscriber = methods[methodName](params).subscribe(function (data) {
+                        var subscriber = methods[methodName](params, options).subscribe(function (data) {
                             _this.store[name].data = data;
                             _this.store[name].data$.next(data);
+                            if (_this.store[name][methodName + "Success"]) {
+                                _this.store[name][methodName + "Success"]();
+                            }
                         }, function (error) {
                             _this.loadingFinish(name);
-                            console.error("geRx error: " + error);
+                            console.error("geRx error:", error);
+                            if (_this.store[name][methodName + "Error"]) {
+                                _this.store[name][methodName + "Error"]();
+                            }
                         }, function () {
                             _this.loadingFinish(name);
                             subscriber.unsubscribe();
@@ -88,17 +93,20 @@ define("geRx", ["require", "exports", "rxjs"], function (require, exports, rxjs_
         GeRx.prototype.loading = function (entityName) {
             return this.store[entityName].loading;
         };
-        GeRx.prototype.show = function (entityName, params) {
-            this.store[entityName].show(params);
+        GeRx.prototype.show = function (entityName, params, options) {
+            this.store[entityName].show(params, options);
         };
-        GeRx.prototype.add = function (entityName, params) {
-            this.store[entityName].add(params);
+        GeRx.prototype.add = function (entityName, params, options) {
+            this.store[entityName].add(params, options);
         };
-        GeRx.prototype.edit = function (entityName, params) {
-            this.store[entityName].edit(params);
+        GeRx.prototype.edit = function (entityName, params, options) {
+            this.store[entityName].edit(params, options);
         };
-        GeRx.prototype.delete = function (entityName, params) {
-            this.store[entityName].delete(params);
+        GeRx.prototype.delete = function (entityName, params, options) {
+            this.store[entityName].delete(params, options);
+        };
+        GeRx.prototype.exception = function (entityName, params, options) {
+            this.store[entityName].exception(params, options);
         };
         return GeRx;
     }());

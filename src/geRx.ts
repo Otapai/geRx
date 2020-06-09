@@ -30,14 +30,20 @@ export class GeRx {
             this.store[name].loading = true;
             this.store[name].loading$.next(true);
           }, 0);
-          const subscriber = methods[methodName](params).subscribe(
+          const subscriber = methods[methodName](params, options).subscribe(
             (data: any) => {
               this.store[name].data = data;
               this.store[name].data$.next(data);
+              if (this.store[name][`${methodName}Success`]) {
+                this.store[name][`${methodName}Success`]();
+              }
             },
             (error: any) => {
               this.loadingFinish(name);
-              console.error(`geRx error: ${error}`);
+              console.error(`geRx error:`, error);
+              if (this.store[name][`${methodName}Error`]) {
+                this.store[name][`${methodName}Error`]();
+              }
             },
             () => {
               this.loadingFinish(name);
@@ -98,19 +104,23 @@ export class GeRx {
     return this.store[entityName].loading;
   }
 
-  public show(entityName: string, params?: any): void {
-    this.store[entityName].show(params);
+  public show(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+    this.store[entityName].show(params, options);
   }
 
-  public add(entityName: string, params?: any): void {
-    this.store[entityName].add(params);
+  public add(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+    this.store[entityName].add(params, options);
   }
 
-  public edit(entityName: string, params?: any): void {
-    this.store[entityName].edit(params);
+  public edit(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+    this.store[entityName].edit(params, options);
   }
 
-  public delete(entityName: string, params?: any): void {
-    this.store[entityName].delete(params);
+  public delete(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+    this.store[entityName].delete(params, options);
+  }
+
+  public exception(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+    this.store[entityName].exception(params, options);
   }
 }
