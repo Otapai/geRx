@@ -1,5 +1,17 @@
 declare module "geRx.interface" {
     import { Observable, Subject } from "rxjs";
+    interface GeRxSubMethods {
+        main: (params?: any, options?: GeRxMethodOptions) => Observable<any>;
+        success?: (params?: any, options?: GeRxMethodOptions) => Observable<any>;
+        error?: (params?: any, options?: GeRxMethodOptions) => Observable<any>;
+    }
+    export interface GeRxMethods {
+        show?: GeRxSubMethods;
+        add?: GeRxSubMethods;
+        edit?: GeRxSubMethods;
+        delete?: GeRxSubMethods;
+        exception?: GeRxSubMethods;
+    }
     export interface Store {
         show?: () => void;
         add?: () => void;
@@ -11,23 +23,6 @@ declare module "geRx.interface" {
         data$?: Subject<any>;
         loading?: boolean;
         loading$?: Subject<boolean>;
-    }
-    export interface GeRxMethods {
-        show?: Observable<any>;
-        showSuccess?: () => void;
-        showError?: () => void;
-        add?: Observable<any>;
-        addSuccess?: () => void;
-        addError?: () => void;
-        edit?: Observable<any>;
-        editSuccess?: () => void;
-        editError?: () => void;
-        delete?: Observable<any>;
-        deleteSuccess?: () => void;
-        deleteError?: () => void;
-        exception?: Observable<any>;
-        exceptionSuccess?: () => void;
-        exceptionError?: () => void;
     }
     export interface GeRxOptions {
         override?: boolean;
@@ -41,7 +36,8 @@ declare module "geRx" {
     import { GeRxMethodOptions, GeRxMethods, GeRxOptions } from "geRx.interface";
     export class GeRx {
         private store;
-        addEntity(name: string, methods: GeRxMethods, options?: GeRxOptions): void;
+        addEntity(name: string, methods: GeRxMethods, thisContext: any, options?: GeRxOptions): void;
+        private callPromise;
         private loadingFinish;
         deleteEntity(name: string): void;
         cleanEntity(name: string): void;

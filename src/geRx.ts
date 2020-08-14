@@ -1,12 +1,19 @@
-import { Subject } from "rxjs";
-import {GeRxMethodOptions, GeRxMethods, GeRxOptions, Store} from "./geRx.interface";
+import { EMPTY, from, Observable, of, Subject } from "rxjs";
+import {
+  GeRxMethodOptions,
+  GeRxMethods,
+  GeRxOptions,
+  Store,
+} from "./geRx.interface";
+import { delay } from "rxjs/operators";
 
 export class GeRx {
-  private store: any = {};
+  private store: Store = {};
 
   public addEntity(
     name: string,
     methods: GeRxMethods,
+    thisContext: any,
     options?: GeRxOptions
   ): void {
     if (!this.store[name] || (options && options.override)) {
@@ -23,43 +30,75 @@ export class GeRx {
         this.store[name].data$.next(null);
       };
 
-      // tslint:disable-next-line:forin
       for (const methodName in methods) {
-        this.store[name][methodName] = (params: any, options?: GeRxMethodOptions) => {
+        this.store[name][methodName] = (
+          params: any,
+          options?: GeRxMethodOptions
+        ) => {
           setTimeout(() => {
             this.store[name].loading = true;
             this.store[name].loading$.next(true);
           }, 0);
-          const subscriber = methods[methodName](params, options).subscribe(
-            (data: any): void => {
-              this.store[name].data = data;
-              this.store[name].data$.next(data);
-              if (this.store[name][`${methodName}Success`]) {
-                this.store[name][`${methodName}Success`](data);
+
+          const mainMethod = (params: any, options: any): Observable<any> => {
+            const method = methods[methodName].main.bind(thisContext);
+            return method(params, options);
+          };
+
+          const subscriber = mainMethod(params, options)
+            .pipe(delay(1))
+            .subscribe(
+              (data: any): void => {
+                this.store[name].data = data;
+                this.store[name].data$.next(data);
+
+                if (methods[methodName].success) {
+                  this.callPromise(
+                    methods[methodName].success.bind(thisContext),
+                    data
+                  );
+                }
+                this.loadingFinish(name);
+                subscriber.unsubscribe();
+              },
+              (error: any): void => {
+                console.error(`geRx error:`, error);
+                if (methods[methodName].error) {
+                  this.callPromise(
+                    methods[methodName].error.bind(thisContext),
+                    error
+                  );
+                }
+                this.loadingFinish(name);
+                subscriber.unsubscribe();
               }
-            },
-            (error: any): void => {
-              this.loadingFinish(name);
-              console.error(`geRx error:`, error);
-              if (this.store[name][`${methodName}Error`]) {
-                this.store[name][`${methodName}Error`](error);
-              }
-            },
-            (): void=> {
-              this.loadingFinish(name);
-              subscriber.unsubscribe();
-            }
-          );
+            );
         };
       }
     }
+  }
+
+  private callPromise(promiseMethod: any, data: any) {
+    const subMethod = (data: any): Observable<any> => {
+      return promiseMethod(data);
+    };
+    const subSubscriber = subMethod(data)
+      .pipe(delay(1))
+      .subscribe(
+        () => {
+          subSubscriber.unsubscribe();
+        },
+        () => {
+          subSubscriber.unsubscribe();
+        }
+      );
   }
 
   private loadingFinish(name: string) {
     setTimeout(() => {
       this.store[name].loading = false;
       this.store[name].loading$.next(false);
-    }, 100)
+    }, 100);
   }
 
   public deleteEntity(name: string): void {
@@ -89,7 +128,6 @@ export class GeRx {
   // Is this for sure?
   public getAllData(): {} {
     const allData = {};
-    // tslint:disable-next-line:forin
     for (const entity in this.store) {
       allData[entity] = this.store[entity].data;
     }
@@ -104,23 +142,43 @@ export class GeRx {
     return this.store[entityName].loading;
   }
 
-  public show(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+  public show(
+    entityName: string,
+    params?: any,
+    options?: GeRxMethodOptions
+  ): void {
     this.store[entityName].show(params, options);
   }
 
-  public add(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+  public add(
+    entityName: string,
+    params?: any,
+    options?: GeRxMethodOptions
+  ): void {
     this.store[entityName].add(params, options);
   }
 
-  public edit(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+  public edit(
+    entityName: string,
+    params?: any,
+    options?: GeRxMethodOptions
+  ): void {
     this.store[entityName].edit(params, options);
   }
 
-  public delete(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+  public delete(
+    entityName: string,
+    params?: any,
+    options?: GeRxMethodOptions
+  ): void {
     this.store[entityName].delete(params, options);
   }
 
-  public exception(entityName: string, params?: any, options?: GeRxMethodOptions): void {
+  public exception(
+    entityName: string,
+    params?: any,
+    options?: GeRxMethodOptions
+  ): void {
     this.store[entityName].exception(params, options);
   }
 }

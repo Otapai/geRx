@@ -31,6 +31,14 @@ export class AppService {
   edit(text: string): Observable<any> {
     return of({message: text}).pipe(delay(3000));
   }
+  
+  editSuccess(data: any): Observable<any> {
+    return of(
+      console.log({message: 'Test editSuccess'}),
+      console.log(data)
+    );
+  }
+
 }
 ```
 
@@ -49,10 +57,14 @@ export class TestComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     const geRxMethods: GeRxMethods = {
-      show: this.appService.hello.bind(this.appService),
-      edit: this.appService.edit.bind(this.appService)
+      show: {
+        main: this.appService.hello
+      },
+      edit: {
+        main: this.appService.edit,
+        success: this.appService.editSuccess
     };
-    this.geRx.addEntity(this.entityName, geRxMethods);
+    this.geRx.addEntity(this.entityName, geRxMethods, this.appService);
   }
 
   ngAfterViewInit(): void {
@@ -85,8 +97,9 @@ export class TestComponent implements OnInit, AfterViewInit {
 
 **Description of the methods:**
 
-- `addEntity(name: string, methods: GeRxMethods, options?: GeRxOptions)` -
-  creating geRx entity
+- `addEntity(name: string, methods: GeRxMethods, thisContext: any, options?: GeRxOptions)` -
+  creating geRx entity. 
+  - `thisContext` - this context for `GeRxMethods`
 - `deleteEntity(name: string)` -
   delete geRx entity
 - `cleanEntity(name: string)` - clearing `.data` and `.data$` data in a geRx entity
@@ -104,6 +117,24 @@ export class TestComponent implements OnInit, AfterViewInit {
 
 ##### Types of parameters used
 
-- `GeRxMethods: { show?: Observable<any>; add?: Observable<any>; edit?: Observable<any>; delete?: Observable<any>; }`
+- `GeRxMethods:` 
+  ``` 
+  {
+    show?: GeRxSubMethods; 
+    add?: GeRxSubMethods; 
+    edit?: GeRxSubMethods; 
+    delete?: GeRxSubMethods; 
+    exception?: GeRxSubMethods
+  }
+  ```
+- `GeRxSubMethods:`
+  ```
+  {
+    main: (params?: any, options?: GeRxMethodOptions) => Observable<any>;
+    success?: (params?: any, options?: GeRxMethodOptions) => Observable<any>;
+    error?: (params?: any, options?: GeRxMethodOptions) => Observable<any>;
+  }
+  ```
+- `GeRxMethodOptions: { switchKey?: string; }`
 - `GeRxOptions: { override: boolean; }`
   - `override` - recreate an entity when it is reinitialized
