@@ -1,9 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": "src",
-    "outFile": "./dist/index.js",
-    "module": "amd",
+    "rootDir": "./src",
+    "module": "commonjs",
     "outDir": "./dist",
     "target": "es5",
     "lib": [
@@ -29,8 +28,12 @@
     "stripInternal": false
   },
   "files": [
-    "src/geRx.ts",
-    "src/geRx.interface.ts"
+    "./src/index.ts",
+    "./src/index.interface.ts"
+  ],
+  "filesGlob": [
+    "./**/*.ts",
+    "!./node_modules/**/*.ts"
   ],
   "formatCodeOptions": {
     "indentSize": 2,
